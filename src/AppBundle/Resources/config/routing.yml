@@ -1,0 +1,5 @@
+api_upload :
+    type: rest
+    resource:     "AppBundle:Default"
+    name_prefix:  api_upload_
+    prefix: /default

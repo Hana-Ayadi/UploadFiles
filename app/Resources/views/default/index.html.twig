@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ form_widget(form.photo) }}
+    <br>
+    {{ form_errors(form.photo) }}
+    <br>
+    <input type="submit" value="Upload"/>
+
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
