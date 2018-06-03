@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Post1;
-use AppBundle\Form\PostType;
+use AppBundle\Entity\Upload;
+use AppBundle\Form\UploadType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,15 +18,9 @@ class DefaultController extends Controller
      *@ApiDoc(
      *      resource=true,
      *     description="Get one single post",
-     *     parameters={
-     *           {
-     *          "name"="photo",
-     *          "dataType"="file",
-     *          "required"="true",
-     *           "multiple"="true",
-     *          "description"="image"
-     *         }
-     *     },
+     *      input={
+     *          "class"="AppBundle\Form\UploadType",
+     *      },
      *     section="posts"
      * )
      * @param Request $request the request object
@@ -35,24 +29,26 @@ class DefaultController extends Controller
      */
     public function postUploadAction(Request $request)
     {
+        $s='http://localhost/PFADEmerde/UploadFiles/web/Upload/';
         $fileSystem = new Filesystem();
         $em=$this->getDoctrine()->getManager();//gerer bd
-        $post=new Post();
-        $form=$this->createForm(PostType::class,$post);
+        $post=new Upload();
+        $form=$this->createForm(UploadType::class,$post);
         $form->handleRequest($request);
-        var_dump($post);
 
-        if($form->isSubmitted()&&$form->isValid())
+        if($form->isSubmitted())
         {
-            var_dump("if");
             $data=$form->getData();
+            var_dump($data);
             $files=$data->getPhoto();
             $i=1;
+            var_dump($files);
+            var_dump($files->guessExtension());
             foreach ($files as $file){
                 $fileName[]= $i.'.'.$file->guessExtension();
                 $i++;
             }
-
+            $fileName= $i.'.'.$files->guessExtension();
             $post->setPhoto($fileName);
 
             $em->persist($post);
@@ -64,6 +60,13 @@ class DefaultController extends Controller
                 echo "An error occurred while creating your directory at ".$exception->getPath();
             }
             $i=1;
+
+
+            $files->move(
+                $this->getParameter('photo_directory').$post->getId(),
+                $i.'.'.$files->guessExtension()
+
+            );
             foreach ($files as $file){
                 $file->move(
                     $this->getParameter('photo_directory').$post->getId(),
@@ -75,11 +78,11 @@ class DefaultController extends Controller
 
         }
         // replace this example code with whatever you need
-        return new Response($this->renderView('default/index.html.twig',['form'=>$form->createView()]));
+        //return new Response($this->renderView('default/index.html.twig',['form'=>$form->createView()]));
+            //url image
+
+        return new Response($s);
     }
 
-    private function generateUniqueFileName()
-    {
-        return md5(uniqid());
-    }
+
 }

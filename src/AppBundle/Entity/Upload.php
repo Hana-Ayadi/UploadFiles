@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  *
  */
-class Post
+class Upload
 {
     /**
      * @var int
@@ -24,7 +24,8 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
      *
      */
     protected $photo;
