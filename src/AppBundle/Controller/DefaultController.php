@@ -39,11 +39,11 @@ class DefaultController extends Controller
         if($form->isSubmitted())
         {
             $data=$form->getData();
-            var_dump($data);
+            //var_dump($data);
             $files=$data->getPhoto();
             $i=1;
-            var_dump($files);
-            var_dump($files->guessExtension());
+            //var_dump($files);
+            //var_dump($files->guessExtension());
             foreach ($files as $file){
                 $fileName[]= $i.'.'.$file->guessExtension();
                 $i++;
@@ -75,6 +75,7 @@ class DefaultController extends Controller
                 );
                 $i++;
             }
+            $s=$s.$post->getId().'/'.$i.'.jpeg';
 
         }
         // replace this example code with whatever you need
